@@ -39,7 +39,6 @@ class ActivityStore {
           this.activityRegistry.set(activity.id, activity);
         });
       });
-      console.log(this.groupActivitiesByDate(activities));
     } catch (error) {
       console.log(error);
     } finally {
@@ -59,13 +58,13 @@ class ActivityStore {
         activity = await agent.Activities.details(id);
         runInAction("getting activity", () => {
           this.activity = activity;
+          this.loadingInitial = false;
         });
       } catch (error) {
-        console.log(error);
-      } finally {
         runInAction("end getting activity", () => {
           this.loadingInitial = false;
         });
+        console.log(error);
       }
     }
   };
