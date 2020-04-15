@@ -2,25 +2,32 @@ import React from "react";
 import { Segment, Item, Header, Button, Image } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
 import { observer } from "mobx-react-lite";
+import { Link } from "react-router-dom";
 
 const activityImageStyle = {
-  filter: 'brightness(30%)'
+  filter: "brightness(30%)",
 };
 
 const activityImageTextStyle = {
-  position: 'absolute',
-  bottom: '5%',
-  left: '5%',
-  width: '100%',
-  height: 'auto',
-  color: 'white'
+  position: "absolute",
+  bottom: "5%",
+  left: "5%",
+  width: "100%",
+  height: "auto",
+  color: "white",
 };
 
-const ActivityDetailHeader: React.FC<{activity: IActivity}> = ({activity}) => {
+const ActivityDetailHeader: React.FC<{ activity: IActivity }> = ({
+  activity,
+}) => {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
-        <Image src={`/assets/categoryImages/${activity.category}.jpg`} fluid style={activityImageStyle} />
+        <Image
+          src={`/assets/categoryImages/${activity.category}.jpg`}
+          fluid
+          style={activityImageStyle}
+        />
         <Segment basic style={activityImageTextStyle}>
           <Item.Group>
             <Item>
@@ -42,7 +49,12 @@ const ActivityDetailHeader: React.FC<{activity: IActivity}> = ({activity}) => {
       <Segment clearing attached="bottom">
         <Button color="teal">Join Activity</Button>
         <Button>Cancel attendance</Button>
-        <Button color="orange" floated="right">
+        <Button
+          as={Link}
+          to={`/manage/${activity.id}`}
+          color="orange"
+          floated="right"
+        >
           Manage Event
         </Button>
       </Segment>
