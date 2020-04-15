@@ -7,6 +7,7 @@ import "./app/layout/styles.css";
 import App from "./app/layout/App";
 import * as serviceWorker from "./serviceWorker";
 import ScrollToTop from "./app/layout/ScrollToTop";
+import 'mobx-react-lite/batchingForReactDom'
 
 export const history = createBrowserHistory();
 
