@@ -1,4 +1,4 @@
-import React, { ReactHTML } from 'react';
+import React from 'react';
 import {
   Segment,
   Item,
