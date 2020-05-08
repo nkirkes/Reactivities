@@ -39,34 +39,39 @@ export default class ActivityStore {
       .start()
       .then(() => console.log(this.hubConnection!.state))
       .then(() => {
-          console.log('attempting to join group');
-          this.hubConnection?.invoke('AddToGroup', activityId);
+        console.log('attempting to join group');
+        this.hubConnection?.invoke('AddToGroup', activityId);
       })
       .catch((error) => console.log('Error establishing connection: ', error));
 
     this.hubConnection.on('ReceiveComment', (comment) => {
       runInAction(() => {
         this.activity!.comments.push(comment);
-      })
-    })
-    
-    this.hubConnection.on('Send', message => {
-        toast.info(message);
+      });
+    });
+
+    this.hubConnection.on('Send', (message) => {
+      toast.info(message);
     });
   };
 
   @action stopHubConnection = () => {
-      this.hubConnection!.stop();
-  }
+    this.hubConnection!.invoke('RemoveFromGroup', this.activity!.id)
+      .then(() => {
+        this.hubConnection!.stop();
+      })
+      .then(() => console.log('Connection stopped'))
+      .catch((error) => console.log(error));
+  };
 
   @action addComment = async (values: any) => {
-      values.activityId = this.activity!.id;
-        try {
-            await this.hubConnection!.invoke('SendComment', values)
-        } catch (error) {
-            console.log(error);
-        }
-  }
+    values.activityId = this.activity!.id;
+    try {
+      await this.hubConnection!.invoke('SendComment', values);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   @computed get activitiesByDate() {
     return this.groupActivitiesByDate(
