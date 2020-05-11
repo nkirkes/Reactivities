@@ -1,4 +1,4 @@
-import React, { ReactHTML } from 'react';
+import React from 'react';
 import { IProfile } from '../../app/models/profile';
 import { combineValidators, isRequired } from 'revalidate';
 import { Form as FinalForm, Field } from 'react-final-form';
