@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivity } from '../models/activity';
+import { IActivity, IActivitiesEnvelope } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
@@ -56,14 +56,17 @@ const requests = {
   postForm: (url: string, file: Blob) => {
     let formData = new FormData();
     formData.append('File', file);
-    return axios.post(url, formData, {
-      headers: {'Content-type': 'multipart/form-data'}
-    }).then(responseBody)
-  }
+    return axios
+      .post(url, formData, {
+        headers: { 'Content-type': 'multipart/form-data' },
+      })
+      .then(responseBody);
+  },
 };
 
 const Activities = {
-  list: (): Promise<IActivity[]> => requests.get('/activities'),
+  list: (limit?: number, page?: number): Promise<IActivitiesEnvelope> =>
+    requests.get(`/activities?limit=${limit}&offset=${page ? page * limit! : 0}`),
   details: (id: string) => requests.get(`/activities/${id}`),
   create: (activity: IActivity) => requests.post('/activities', activity),
   update: (activity: IActivity) =>
@@ -84,13 +87,17 @@ const User = {
 const Profiles = {
   get: (username: string): Promise<IProfile> =>
     requests.get(`/profiles/${username}`),
-  updateProfile: (profile: Partial<IProfile>) => requests.put(`/profiles/`, profile),
-  uploadPhoto: (photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
+  updateProfile: (profile: Partial<IProfile>) =>
+    requests.put(`/profiles/`, profile),
+  uploadPhoto: (photo: Blob): Promise<IPhoto> =>
+    requests.postForm(`/photos`, photo),
   setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
   deletePhoto: (id: string) => requests.del(`/photos/${id}`),
-  follow: (username: string) => requests.post(`/profiles/${username}/follow`, {}),
+  follow: (username: string) =>
+    requests.post(`/profiles/${username}/follow`, {}),
   unfollow: (username: string) => requests.del(`/profiles/${username}/follow`),
-  listFollowings: (username: string, predicate: string) => requests.get(`/profiles/${username}/follow?predicate=${predicate}`)
+  listFollowings: (username: string, predicate: string) =>
+    requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
 };
 
 export default {
