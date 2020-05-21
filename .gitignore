@@ -358,4 +358,7 @@ MigrationBackup/
 
 #  Sqlite
 *.db
+
+#
 wwwroot
+.DS_Store
